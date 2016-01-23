@@ -38,51 +38,53 @@ def main(argv):
     write_stream.write("@RELATION %s"%args.output_file.split(".")[0])
     write_stream.write("\n\n")
     
-    args.input_file=args.input_file.split()
+    args.input_file=args.input_file.split(",")
     num_layers=len(args.input_file)
     
-    env=lmdb.open(args.input_file,readonly=True)
     feature_dims=0
-    with env.begin() as txn:
-        #write arff file header
+    #write arff file header
+    
+    #calc total feature dims
+    txns=[]
+    for l in range(num_layers):
+        env=lmdb.open(args.input_file[l],readonly=True)
+        txn=env.begin()
+        txns.append(txn)
+        raw_datum = txn.get(b'00000000')
+        datum=caffe.proto.caffe_pb2.Datum()
+        datum.ParseFromString(raw_datum)
+        flat_x = np.fromstring(datum.data, dtype=np.float32)
+        feature_dims+=len(flat_x)
+                
+    write_stream.write("%% %d numeric descriptors\n\n"%feature_dims)
+    
+    for i in range(1,feature_dims+1):
+        write_stream.write("@ATTRIBUTE a%05d NUMERIC\n"%i)
+    write_stream.write("@ATTRIBUTE class {")
+    for i in range(1,int(args.num_labels)):
+        write_stream.write("%d,"%i)
+    #write the last class
+    write_stream.write("%d"%int(args.num_labels))
+    
+    write_stream.write("}\n\n\n")
+    
+    write_stream.write("@DATA\n\n")
         
-        #calc total feature dims
+    #now start writing the data
+    cursor=txns[0].cursor()
+    #print("after cursor")
+    for key, value in cursor:
         for l in range(num_layers):
-            raw_datum = txn.get(b'00000000')
+            raw_datum = txns[l].get(key)
             datum=caffe.proto.caffe_pb2.Datum()
             datum.ParseFromString(raw_datum)
-            flat_x = np.fromstring(datum.data, dtype=np.float32)
-            feature_dims+=len(flat_x)
-                    
-        write_stream.write("%% %d numeric descriptors\n\n"%feature_dims)
-        
-        for i in range(1,feature_dims+1):
-            write_stream.write("@ATTRIBUTE a%05d NUMERIC\n"%i)
-        write_stream.write("@ATTRIBUTE class {")
-        for i in range(1,int(args.num_labels)):
-            write_stream.write("%d,"%i)
-        #write the last class
-        write_stream.write("%d"%int(args.num_labels))
-        
-        write_stream.write("}\n\n\n")
-        
-        write_stream.write("@DATA\n\n")
+            flat_x = np.fromstring(datum.data, dtype=np.float32)            
+            y=datum.label
+            for i in range(len(flat_x)):
+                write_stream.write("%f,"%flat_x[i])
+        write_stream.write("%d\n"%y)
         
         
-        cursor=txn.cursor()
-        #print("after cursor")
-        for key, value in cursor:
-            for l in range(num_layers):
-                raw_datum = txn.get(key)
-                datum=caffe.proto.caffe_pb2.Datum()
-                datum.ParseFromString(raw_datum)
-                flat_x = np.fromstring(datum.data, dtype=np.float32)            
-                y=datum.label
-                for i in range(len(flat_x)):
-                    write_stream.write("%f,"%flat_x[i])
-            write_stream.write("%d\n"%y)
-            exit(1)
-            
             
             
             
