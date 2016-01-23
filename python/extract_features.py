@@ -156,7 +156,7 @@ def main(argv):
                          for im_f in im_fs[i*batch_size:(i+1)*batch_size]] #get i-th batch im_fs 
                 
                 print("Classifying %d-th batch inputs " % i)
-                batch_extraction=classifier.extract(inputs,args.blob, not args.center_only) # take the only center crop of the image. Intended to change later on
+                batch_extraction=classifier.extract(inputs,args.blob, oversample=True) # take the only center crop of the image. Intended to change later on
                 #print(batch_extraction.shape)
                 for e in range(batch_extraction.shape[0]):
                     batch_extraction[e]=batch_extraction[e]/LA.norm(batch_extraction[e])
