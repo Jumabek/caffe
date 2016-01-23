@@ -179,7 +179,7 @@ def main(argv):
         if num_batch*batch_size<num_examples:
             inputs =[caffe.io.load_image(im_f) for im_f in im_fs[num_batch*batch_size:]] #get i-th batch im_fs
             print("Classifying last batch inputs ")
-            batch_extraction=classifier.extract(inputs, args.blob,not args.center_only) # take the only center crop of the image. Intended to change later on
+            batch_extraction=classifier.extract(inputs, args.blob,oversample=True) # take the only center crop of the image. Intended to change later on
             
             for e in range(batch_extraction.shape[0]):
                         batch_extraction[e]=batch_extraction[e]/LA.norm(batch_extraction[e])
@@ -189,7 +189,7 @@ def main(argv):
                         datum.width = 1
                         datum.data = batch_extraction[e].tostring()
                         #example id
-                        id=i*batch_size+e
+                        id=num_batch*batch_size+e
                         str_id = '{:08}'.format(id)
                         txn.put(str_id,datum.SerializeToString())
                         
