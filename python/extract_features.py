@@ -192,6 +192,7 @@ def main(argv):
                         id=num_batch*batch_size+e
                         datum.label=int(labels[id])
                         str_id = '{:08}'.format(id)
+                        print(str_id)
                         txn.put(str_id,datum.SerializeToString())
                         
 #         if num_batch==0:
