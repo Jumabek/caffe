@@ -190,6 +190,7 @@ def main(argv):
                         datum.data = batch_extraction[e].tostring()
                         #example id
                         id=num_batch*batch_size+e
+                        datum.label=int(labels[id])
                         str_id = '{:08}'.format(id)
                         txn.put(str_id,datum.SerializeToString())
                         
