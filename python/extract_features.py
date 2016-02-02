@@ -146,7 +146,7 @@ def main(argv):
     
     
     # one example needs 4000 bytes and I am allocating 10 times bigger one
-    map_size=10*num_examples*4000
+    map_size=10*num_examples*40000
     
     env=lmdb.open(args.output_file,map_size)
     start = time.time()
