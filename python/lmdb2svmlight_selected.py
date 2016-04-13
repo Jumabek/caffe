@@ -85,73 +85,7 @@ def main(argv):
         
             
             
-            
-
-def slice(list,begin,end):
-    #print(list)
-    
-    copylist=copy.deepcopy(list)
-    left=find_begin(copylist,begin,len(copylist)/2)
-    
-    
-    copylist=copy.deepcopy(list)
-    right=find_end(copylist,end,len(copylist)/2)
-   
-    
-    print("-------------------------list[left]-------------------------------")
-    print(int(left))
-    print(list[left])
-    
-    print("-------------------------list[right]-------------------------------")
-    print(int(right))
-    print(list[right])
-    
-    return list[left:right+1]
-
-def find_begin(list,begin,or_index):
-    pivot=len(list)/2
-    print(len(list),pivot,begin,or_index)
-    
-    if  pivot==0: 
-        return or_index
-    else:
-        if list[pivot]<=begin:
-            or_index=or_index+(pivot)/2
-            return find_begin(list[pivot:],begin, or_index)
-        else:
-            or_index=or_index-(pivot-(pivot)/2)
-            return find_begin(list[:pivot], begin,or_index)
-
-
-def find_end(list,end,or_index):
-    pivot=len(list)/2
-    print(len(list),pivot,end,or_index)
-    
-    if  pivot==0: 
-        return or_index
-    else:
-        if list[pivot]<end:
-            or_index=or_index+(pivot)/2
-            return find_end(list[pivot:],end, or_index)
-        else:
-            or_index=or_index-(pivot-(pivot)/2)
-            return find_end(list[:pivot], end,or_index)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+         
 
 
 
