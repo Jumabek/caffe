@@ -78,8 +78,8 @@ def main(argv):
         write_stream.write("%d\t"%y)
             
         #for i in range(len(flat_x)):
-        for index in selected_indices:
-            write_stream.write("%d:%f "%(index, combined_x[index]))
+        for i in range(len(selected_indices)):
+            write_stream.write("%d:%f "%(i, combined_x[selected_indices[i]]))
         
         write_stream.write("\n")      
         
