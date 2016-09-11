@@ -93,3 +93,8 @@ LOCK
 LOG*
 CURRENT
 MANIFEST-*
+
+
+#additional Log files
+*.log.test
+*.log.train
