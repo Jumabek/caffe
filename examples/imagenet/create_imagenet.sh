@@ -4,7 +4,7 @@
 set -e
 
 EXAMPLE=/media/ailab/Data/imagenet
-DATA=data/ilsvrc12
+DATA=/media/ailab/Data/imagenet
 TOOLS=build/tools
 
 TRAIN_DATA_ROOT=/media/ailab/Data/imagenet/train/
@@ -42,8 +42,8 @@ GLOG_logtostderr=1 $TOOLS/convert_imageset \
     --resize_width=$RESIZE_WIDTH \
     --shuffle \
     $TRAIN_DATA_ROOT \
-    $DATA/train.txt \
-    $EXAMPLE/ilsvrc12_train_lmdb
+    $DATA/train2.txt \
+    $EXAMPLE/ilsvrc12_train2_lmdb
 
 echo "Creating val lmdb..."
 
@@ -52,7 +52,7 @@ GLOG_logtostderr=1 $TOOLS/convert_imageset \
     --resize_width=$RESIZE_WIDTH \
     --shuffle \
     $VAL_DATA_ROOT \
-    $DATA/val.txt \
-    $EXAMPLE/ilsvrc12_val_lmdb
+    $DATA/val2.txt \
+    $EXAMPLE/ilsvrc12_val2_lmdb
 
 echo "Done."
