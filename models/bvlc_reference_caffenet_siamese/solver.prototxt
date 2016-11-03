@@ -1,4 +1,4 @@
-net: "models/bvlc_reference_caffenet_siamese_5conv/train_val.prototxt"
+net: "models/bvlc_reference_caffenet_siamese/train_val.prototxt"
 test_iter: 1
 test_interval: 50000
 base_lr: 0.0001
@@ -10,5 +10,5 @@ max_iter: 450000
 momentum: 0.9
 weight_decay: 0.0005
 snapshot: 50000
-snapshot_prefix: "models/bvlc_reference_caffenet_siamese_5conv/caffenet_train"
+snapshot_prefix: "models/bvlc_reference_caffenet_siamese/caffenet_train"
 solver_mode: GPU
