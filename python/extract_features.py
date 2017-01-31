@@ -27,7 +27,7 @@ def main(argv):
     )
     parser.add_argument(
         "output_file",
-        help="Output npy filename."
+        help="Output lmdb filename."
     )
     parser.add_argument(
         "blob",
@@ -37,14 +37,12 @@ def main(argv):
     # Optional arguments.
     parser.add_argument(
         "--model_def",
-        default=os.path.join(pycaffe_dir,
-                "../models/bvlc_reference_caffenet/deploy.prototxt"),
+        default= "models/bvlc_reference_caffenet/deploy.prototxt",
         help="Model definition file."
     )
     parser.add_argument(
         "--pretrained_model",
-        default=os.path.join(pycaffe_dir,
-                "../models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel"),
+        default="models/bvlc_reference_caffenet/bvlc_alexnet.caffemodel",
         help="Trained model weights file."
     )
     parser.add_argument(
@@ -65,8 +63,7 @@ def main(argv):
     )
     parser.add_argument(
         "--mean_file",
-        default=os.path.join(pycaffe_dir,
-                             'caffe/imagenet/ilsvrc_2012_mean.npy'),
+        default='examples/imagenet/imagenet_mean.npy',
         help="Data set image mean of [Channels x Height x Width] dimensions " +
              "(numpy array). Set to '' for no mean subtraction."
     )
@@ -116,20 +113,6 @@ def main(argv):
             image_dims=image_dims, mean=mean,
             input_scale=args.input_scale, raw_scale=args.raw_scale,
             channel_swap=channel_swap)
-
-#     # Load numpy array (.npy), directory glob (*.jpg), or image file.
-#     args.input_file = os.path.expanduser(args.input_file)
-#     if args.input_file.endswith('npy'):
-#         print("Loading file: %s" % args.input_file)
-#         inputs = np.load(args.input_file)
-#     elif os.path.isdir(args.input_file):
-#         print("Loading folder: %s" % args.input_file)
-#         inputs =[caffe.io.load_image(im_f)
-#                  for im_f in glob.glob(args.input_file + '/*.' + args.ext)]
-#     else:
-#         print("Loading file: %s" % args.input_file)
-#         inputs = [caffe.io.load_image(args.input_file)]
-    
     
     #read input files
     f=open(args.input_file)
@@ -194,28 +177,7 @@ def main(argv):
                         str_id = '{:08}'.format(id)
                         print(str_id)
                         txn.put(str_id,datum.SerializeToString())
-                        
-#         if num_batch==0:
-#             extractions=batch_extraction
-#         else:
-#             extractions=np.concatenate((extractions,batch_extraction),axis=0)
-        #end last batch
-    
-    
-#    print("Our final predictions.shape is", extractions.shape)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+                            
     
     print("extracted features for %d inputs." % len(inputs))
 

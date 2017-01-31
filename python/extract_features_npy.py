@@ -15,9 +15,9 @@ args = parser.parse_args()
 caffe_root = args.c
 path_to_img = args.p
 mean        = caffe_root + 'python/caffe/imagenet/ilsvrc_2012_mean.npy'
-deploy      = caffe_root + 'models/bvlc_reference_caffenet/deploy_feature.prototxt'
-model       = caffe_root + 'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'
-feat_layer = 'fc6wi'
+deploy      = caffe_root + 'models/bvlc_reference_caffenet/deploy.prototxt'
+model       = caffe_root + 'models/bvlc_reference_caffenet/bvlc_alexnet.caffemodel'
+feat_layer = 'pool5'
 
 import sys
 sys.path.insert(0, caffe_root + 'python')
@@ -40,8 +40,9 @@ images = np.load(args.i)
 N = len(images)
 net.blobs['data'].reshape(N,3,227,227)
 for i in range(N):
-    img = path_to_img + images[i]
+    
     net.blobs['data'].data[i] = \
-        transformer.preprocess('data', caffe.io.load_image(img))
+        transformer.preprocess('data', caffe.io.load_image(images[i]))
 net.forward()
+print net.blobs[feat_layer].data.shape
 np.save(args.o, net.blobs[feat_layer].data)
